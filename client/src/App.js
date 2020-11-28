@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
 import Customer from './components/Customer'
 import './App.css';
 
@@ -13,9 +12,9 @@ import CircularProgress from '@material-ui/core/CircularProgress';
 import { withStyles } from '@material-ui/core/styles'
 const styles = theme => ({
   root:{
-    width: "100%",
+    width: "60%",
     marginTop: theme.spacing.unit * 3,
-    overflowX: "auto"
+    overflowX: "auto",
   },
   table:{
     minWidth: 1080
@@ -66,7 +65,7 @@ class App extends Component {
               </TableRow>
             </TableHead>
             <TableBody>
-            { this.state.customers ? this.state.customers.map(c => { return (<Customer key={c.id} id={c.id} image={c.image} name={c.name} birthday={c.birthday} gender={c.gender} job={c.job} />); })
+            { this.state.customers ? this.state.customers.map(c => { return (<Customer key={c.ID} id={c.ID} image={c.IMAGE} name={c.NAME} birthday={c.BIRTHDAY} gender={c.GENDER} job={c.JOB} />); })
             : 
             <TableRow>
               <TableCell colSpan = "6" align = "center">
