@@ -20,12 +20,48 @@ const connection = mysql.createConnection({
 });
 connection.connect();
 
+const multer = require('multer');
+const upload = multer({dest: './upload'});
+
 app.get('/api/customers',(req,res) => {
+  var queryString = 
+  "SELECT * "+
+  "FROM CUSTOMER"+
+  " WHERE "+
+  "isDeleted = 'N'"
     connection.query(
-      "SELECT * FROM CUSTOMER",
+      queryString,
       (err,rows,fields) =>{
+        console.log(queryString);
         res.send(rows);
       }
     );
 });
+
+app.use('/image',express.static('./upload'));
+
+app.post('/api/customers',upload.single('image'),(req,res) => {
+    let sql = 'INSERT INTO CUSTOMER VALUES(NULL,?,?,?,?,?, now(),N)';
+    let image = '/image/'+req.file.filename;
+    let name = req.body.name;
+    let birthday = req.body.birthday;
+    let gender = req.body.gender;
+    let job = req.body.job;
+    let params = [image,name,birthday,gender,job];
+    connection.query(sql,params,
+      (err,rows,fields) => {
+        res.send(rows);
+        console.log(err);
+      }
+    );
+});
+
+app.delete('/api/customers/:id',(req,res) => {
+    let sql = "UPDATE CUSTOMER SET isDeleted = 'Y' WHERE ID = ?";
+    let params = [req.params.id];
+    connection.query(sql, params,
+      (err,rows,fields) => {
+        res.send(rows);
+      })
+}); 
 app.listen(port, () => console.log(`Listening on port ${port}`));
